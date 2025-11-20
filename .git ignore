@@ -1,0 +1,102 @@
+# 编译输出文件
+*.o
+*.d
+*.lst
+*.su
+*.map
+*.sym
+
+# 可执行文件
+*.elf
+*.hex
+*.bin
+*.axf
+
+# 调试文件
+*.elf.debug
+*.debug
+*.dbg
+
+# IDE 项目文件
+*.uvprojx
+*.uvoptx
+*.uvguix
+*.uvmpw
+*.ewp
+*.eww
+*.ewd
+.project
+.cproject
+.settings/
+
+# 编译目录
+Debug/
+Release/
+Obj/
+build/
+Binaries/
+
+# 系统文件
+Thumbs.db
+.DS_Store
+*.swp
+*.swo
+*~
+
+# 备份文件
+*.bak
+*.backup
+*.orig
+*.rej
+
+# 依赖文件
+.dep/
+.deps/
+
+# 库文件
+*.a
+*.lib
+
+# 预编译头文件
+*.gch
+*.pch
+
+# 日志文件
+*.log
+*.trace
+
+# 临时文件
+*.tmp
+*.temp
+
+# 版本控制
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace
+
+# STM32 CubeMX 生成的文件
+.ioc
+MX_*.c
+MX_*.h
+
+# JLink 相关
+*.jlink
+*.jflash
+
+# OpenOCD 相关
+*.cfg
+*.openocd
+
+# 用户特定配置（可能包含本地路径）
+*.user
+*.workspace
+
+# 编译中间文件
+_startup_stm32f10x.*
+system_stm32f10x.*
+startup_stm32f10x*.*
+
+# CMSIS 相关编译输出
+core_cm3.*
+system_stm32f10x.*
