@@ -1,119 +1,43 @@
 #include "stm32f10x.h"                  // Device header
-
 #include "Delay.h"
 #include "OLED.h"
-#include "Timer.h"
 #include "key.h"
 #include "Motor.h"
-#include "Encoder.h"
-#include "Serial.h"
-#include <stdlib.h>
-float Target, Actual, Out;		
-float Kp, Ki, Kd;
-float Error0=0, Error1=0, Error2=0;	
-uint8_t KeyNum;
-uint8_t p=0;
+#include "Ir.h"
+
 int main(void)
-{
-
-	OLED_Init();
-	OLED_Init();
+{   
 	Motor_Init();
-	Motor2_Init();
-	Key_Init();
-	Encoder_Init();	
-	Encoder_Init2();
-	Serial_Init();
-	Timer_Init();
-	OLED_Printf(0, 0, OLED_8X16, "Speed Control");
-	OLED_Update();
-	Target=0;
-	Kp=5, Ki=1, Kd=3;
-	while (1)
+	Ir_init();
+	
+	unsigned char Left_xunji_flag=0;
+	unsigned char Right_xunji_flag=0;
+	while(1)
 	{
-		KeyNum = Key_GetNum();
-		if(KeyNum==1)
-		{
-			Target=0;
-			Actual=0;
-			Out = 0;
-			Error0 = 0;
-			Error1 = 0;
-			Error2 = 0;
+		Left_xunji_flag=Left_xunji();
+		Right_xunji_flag=Right_xunji();
+		
+		if(Left_xunji_flag==0&&Right_xunji_flag==0)
+		{		
+			Motor_LeftSpeed(50);             
+			Motor_RightSpeed(50);          
+		}
 
-			p=1-p; 
-			OLED_Clear();
-			OLED_Update();
-		}
-		if(p==0)
-		{	
-			Kp=5, Ki=2, Kd=3;
-			OLED_Printf(0, 0, OLED_8X16, "Speed Control");
-			OLED_Printf(0, 16, OLED_8X16, "Kp:%4.2f", Kp);	
-			OLED_Printf(0, 32, OLED_8X16, "Ki:%4.2f", Ki);	
-			OLED_Printf(0, 48, OLED_8X16, "Kd:%4.2f", Kd);	
-			OLED_Printf(64, 16, OLED_8X16, "Tar:%+04.0f", Target);
-			OLED_Printf(64, 32, OLED_8X16, "Act:%+04.0f", Actual);
-			OLED_Printf(64, 48, OLED_8X16, "Out:%+04.0f", Out);	
-			OLED_Update();
-		}
-		else{
-			Kp=3, Ki=0.1 , Kd=0;
-			OLED_Printf(0, 0, OLED_8X16, "Location Control");
-			OLED_Printf(0, 16, OLED_8X16, "Kp:%4.2f", Kp);	
-			OLED_Printf(0, 32, OLED_8X16, "Ki:%4.2f", Ki);	
-			OLED_Printf(0, 48, OLED_8X16, "Kd:%4.2f", Kd);
-			OLED_Printf(64, 16, OLED_8X16, "Tar:%+04.0f", Target);
-			OLED_Printf(64, 32, OLED_8X16, "Act:%+04.0f", Actual);
-			OLED_Printf(64, 48, OLED_8X16, "Out:%+04.0f", Out);	
-			OLED_Update();
-		}
-		Serial_Printf("%f,%f,%f\r\n", Target, Actual, Out);	
-		if(Serial_RxFlag == 1)
-		{
-			Target = (float)atof(Serial_RxPacket);
-			Serial_RxFlag = 0;
-		}
-	}
-}
-void TIM1_UP_IRQHandler(void)
-{
-
-	static uint16_t Count;	
-	if (TIM_GetITStatus(TIM1, TIM_IT_Update) == SET)
-	{
-		Count ++;
-		Key_Tick();	
-		if (Count >= 10)	
-		{
-			Count = 0;	
-			if(p==0){
-				Actual = Encoder_Get();
-				Error2 = Error1;
-				Error1 = Error0;	
-				Error0 = Target - Actual;	
-				Out += Kp * (Error0 - Error1) + Ki * Error0
-					+ Kd * (Error0 - 2 * Error1 + Error2);
-				if (Out > 100) {Out = 100;}	
-				if (Out < -100) {Out = -100;}
-				Motor_SetSpeed(Out);
-			}
-			else
-			{
-				Target+=Encoder_Get();
-				Actual+=Encoder_Get2();
-				Error2 = Error1;
-				Error1 = Error0;	
-				Error0 = Target - Actual;	
-				Out += Kp * (Error0 - Error1) + Ki * Error0
-					+ Kd * (Error0 - 2 * Error1 + Error2);
-				if (Out > 100) {Out = 100;}	
-				if (Out < -100) {Out = -100;}
-				Motor2_SetSpeed(Out);
-			}
+		else if(Left_xunji_flag==1&&Right_xunji_flag==0)
+		{					
+			Motor_LeftSpeed(-50);         
+			Motor_RightSpeed(50);          
 		}
 		
-		TIM_ClearITPendingBit(TIM1, TIM_IT_Update);
+		else if(Left_xunji_flag==0&&Right_xunji_flag==1)
+		{	
+			Motor_LeftSpeed(50);            
+			Motor_RightSpeed(-50);        
+		}
+		
+		else if(Left_xunji_flag==1&&Right_xunji_flag==1)
+		{
+			Stop(1);
+	    }
 	}
 }
-

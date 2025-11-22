@@ -745,6 +745,16 @@
               <FileType>5</FileType>
               <FilePath>.\Hardware\PWM.h</FilePath>
             </File>
+            <File>
+              <FileName>Ir.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\Hardware\Ir.c</FilePath>
+            </File>
+            <File>
+              <FileName>Ir.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\Hardware\Ir.h</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>

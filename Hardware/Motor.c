@@ -1,5 +1,6 @@
 #include "stm32f10x.h"                  // Device header
 #include "PWM.h"
+#include "Delay.h"
 
 void Motor_Init(void)
 {
@@ -7,52 +8,55 @@ void Motor_Init(void)
 	
 	GPIO_InitTypeDef GPIO_InitStructure;
 	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_Out_PP;
-	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_12 | GPIO_Pin_13;
+	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_6 | GPIO_Pin_7 |GPIO_Pin_8 | GPIO_Pin_9;
 	GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
 	GPIO_Init(GPIOB, &GPIO_InitStructure);
+	
+	GPIO_SetBits(GPIOB, GPIO_Pin_6);
+	GPIO_SetBits(GPIOB, GPIO_Pin_7);
+	GPIO_SetBits(GPIOB, GPIO_Pin_8);
+	GPIO_SetBits(GPIOB, GPIO_Pin_9);
 	
 	PWM_Init();
 }
 
-void Motor_SetSpeed(int8_t Speed)
+void Motor_LeftSpeed(int8_t Speed)
 {
 	if (Speed >= 0)
 	{
-		GPIO_SetBits(GPIOB, GPIO_Pin_12);
-		GPIO_ResetBits(GPIOB, GPIO_Pin_13);
-		PWM_SetCompare3(Speed);
+		GPIO_SetBits(GPIOB, GPIO_Pin_8);
+		GPIO_ResetBits(GPIOB, GPIO_Pin_9);
+		PWM_SetCompare_Left(-Speed);
 	}
 	else
 	{
-		GPIO_ResetBits(GPIOB, GPIO_Pin_12);
-		GPIO_SetBits(GPIOB, GPIO_Pin_13);
-		PWM_SetCompare3(-Speed);
+		GPIO_ResetBits(GPIOB, GPIO_Pin_8);
+		GPIO_SetBits(GPIOB, GPIO_Pin_9);
+		PWM_SetCompare_Left(Speed);
 	}
 }
-void Motor2_Init(void)
+
+void Motor_RightSpeed(int16_t Speed)
 {
-    RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOB, ENABLE);
-
-    GPIO_InitTypeDef GPIO_InitStructure;
-    GPIO_InitStructure.GPIO_Mode = GPIO_Mode_Out_PP;
-    GPIO_InitStructure.GPIO_Pin = GPIO_Pin_14 | GPIO_Pin_15;
-    GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
-    GPIO_Init(GPIOB, &GPIO_InitStructure);
-
-    PWM_Init();
+	if(Speed<0)
+	{
+		GPIO_ResetBits(GPIOB,GPIO_Pin_6);
+		GPIO_SetBits(GPIOB,GPIO_Pin_7);
+		PWM_SetCompare_Right(-Speed);
+	}
+	if(Speed>0)
+	{
+		GPIO_SetBits(GPIOB,GPIO_Pin_6);
+		GPIO_ResetBits(GPIOB,GPIO_Pin_7);
+		PWM_SetCompare_Right(Speed);
+	}
 }
-void Motor2_SetSpeed(int8_t Speed)
+
+void Stop(uint8_t t)
 {
-    if (Speed >= 0)
-    {
-        GPIO_SetBits(GPIOB, GPIO_Pin_15);
-        GPIO_ResetBits(GPIOB, GPIO_Pin_14);
-        PWM_SetCompare4(Speed);
-    }
-    else
-    {
-        GPIO_ResetBits(GPIOB, GPIO_Pin_15);
-        GPIO_SetBits(GPIOB, GPIO_Pin_14);
-        PWM_SetCompare4(-Speed);
-    }
+	GPIO_SetBits(GPIOB, GPIO_Pin_6);
+	GPIO_SetBits(GPIOB, GPIO_Pin_7);
+	GPIO_SetBits(GPIOB, GPIO_Pin_8);
+	GPIO_SetBits(GPIOB, GPIO_Pin_9);
+	Delay_s(t);
 }
