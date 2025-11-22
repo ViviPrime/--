@@ -848,7 +848,7 @@ F (.\Hardware\OLED_Data.c)(0x690A0D04)(--c99 -c --cpu Cortex-M3 -g -O0 --apcs=in
 I (Hardware\OLED_Data.h)(0x690A0D04)
 I (C:\Keil_v5\ARM\ARMCC\include\stdint.h)(0x588B8344)
 F (.\Hardware\OLED_Data.h)(0x690A0D04)()
-F (.\Hardware\key.c)(0x690A0D03)(--c99 -c --cpu Cortex-M3 -g -O0 --apcs=interwork --split_sections -I .\Start -I .\Library -I .\User -I .\System -I .\Hardware --no-multibyte-chars-I.\RTE\_Target_1-IC:\Keil_v5\ARM\PACK\Keil\STM32F1xx_DFP\2.2.0\Device\Include-IC:\Keil_v5\ARM\CMSIS\Include-D__UVISION_VERSION="524" -DSTM32F10X_MD -DUSE_STDPERIPH_DRIVER-o .\objects\key.o --omf_browse .\objects\key.crf --depend .\objects\key.d)
+F (.\Hardware\key.c)(0x6921A9DB)(--c99 -c --cpu Cortex-M3 -g -O0 --apcs=interwork --split_sections -I .\Start -I .\Library -I .\User -I .\System -I .\Hardware --no-multibyte-chars-I.\RTE\_Target_1-IC:\Keil_v5\ARM\PACK\Keil\STM32F1xx_DFP\2.2.0\Device\Include-IC:\Keil_v5\ARM\CMSIS\Include-D__UVISION_VERSION="524" -DSTM32F10X_MD -DUSE_STDPERIPH_DRIVER-o .\objects\key.o --omf_browse .\objects\key.crf --depend .\objects\key.d)
 I (.\Start\stm32f10x.h)(0x690A0CE9)
 I (.\Start\core_cm3.h)(0x690A0CE8)
 I (C:\Keil_v5\ARM\ARMCC\include\stdint.h)(0x588B8344)
@@ -878,7 +878,7 @@ I (.\Library\stm32f10x_usart.h)(0x690A0D02)
 I (.\Library\stm32f10x_wwdg.h)(0x690A0D03)
 I (.\Library\misc.h)(0x690A0CFC)
 I (.\System\Delay.h)(0x690A0CE8)
-F (.\Hardware\key.h)(0x690A0D03)()
+F (.\Hardware\key.h)(0x6921A9DB)()
 F (.\Hardware\Serial.c)(0x690A0D05)(--c99 -c --cpu Cortex-M3 -g -O0 --apcs=interwork --split_sections -I .\Start -I .\Library -I .\User -I .\System -I .\Hardware --no-multibyte-chars-I.\RTE\_Target_1-IC:\Keil_v5\ARM\PACK\Keil\STM32F1xx_DFP\2.2.0\Device\Include-IC:\Keil_v5\ARM\CMSIS\Include-D__UVISION_VERSION="524" -DSTM32F10X_MD -DUSE_STDPERIPH_DRIVER-o .\objects\serial.o --omf_browse .\objects\serial.crf --depend .\objects\serial.d)
 I (.\Start\stm32f10x.h)(0x690A0CE9)
 I (.\Start\core_cm3.h)(0x690A0CE8)
@@ -1033,7 +1033,7 @@ I (.\Library\stm32f10x_usart.h)(0x690A0D02)
 I (.\Library\stm32f10x_wwdg.h)(0x690A0D03)
 I (.\Library\misc.h)(0x690A0CFC)
 F (.\Hardware\Ir.h)(0x6921A755)()
-F (.\User\main.c)(0x6921A754)(--c99 -c --cpu Cortex-M3 -g -O0 --apcs=interwork --split_sections -I .\Start -I .\Library -I .\User -I .\System -I .\Hardware --no-multibyte-chars-I.\RTE\_Target_1-IC:\Keil_v5\ARM\PACK\Keil\STM32F1xx_DFP\2.2.0\Device\Include-IC:\Keil_v5\ARM\CMSIS\Include-D__UVISION_VERSION="524" -DSTM32F10X_MD -DUSE_STDPERIPH_DRIVER-o .\objects\main.o --omf_browse .\objects\main.crf --depend .\objects\main.d)
+F (.\User\main.c)(0x6921ABA1)(--c99 -c --cpu Cortex-M3 -g -O0 --apcs=interwork --split_sections -I .\Start -I .\Library -I .\User -I .\System -I .\Hardware --no-multibyte-chars-I.\RTE\_Target_1-IC:\Keil_v5\ARM\PACK\Keil\STM32F1xx_DFP\2.2.0\Device\Include-IC:\Keil_v5\ARM\CMSIS\Include-D__UVISION_VERSION="524" -DSTM32F10X_MD -DUSE_STDPERIPH_DRIVER-o .\objects\main.o --omf_browse .\objects\main.crf --depend .\objects\main.d)
 I (.\Start\stm32f10x.h)(0x690A0CE9)
 I (.\Start\core_cm3.h)(0x690A0CE8)
 I (C:\Keil_v5\ARM\ARMCC\include\stdint.h)(0x588B8344)
@@ -1063,11 +1063,11 @@ I (.\Library\stm32f10x_usart.h)(0x690A0D02)
 I (.\Library\stm32f10x_wwdg.h)(0x690A0D03)
 I (.\Library\misc.h)(0x690A0CFC)
 I (.\System\Delay.h)(0x690A0CE8)
+I (.\Hardware\Motor.H)(0x6921A755)
+I (.\Hardware\Ir.H)(0x6921A755)
 I (.\Hardware\OLED.h)(0x690A0D04)
 I (.\Hardware\OLED_Data.h)(0x690A0D04)
-I (.\Hardware\key.h)(0x690A0D03)
-I (.\Hardware\Motor.h)(0x6921A755)
-I (.\Hardware\Ir.h)(0x6921A755)
+I (.\Hardware\Key.h)(0x6921A9DB)
 F (.\User\stm32f10x_conf.h)(0x690A0CE7)()
 F (.\User\stm32f10x_it.c)(0x690A0CE7)(--c99 -c --cpu Cortex-M3 -g -O0 --apcs=interwork --split_sections -I .\Start -I .\Library -I .\User -I .\System -I .\Hardware --no-multibyte-chars-I.\RTE\_Target_1-IC:\Keil_v5\ARM\PACK\Keil\STM32F1xx_DFP\2.2.0\Device\Include-IC:\Keil_v5\ARM\CMSIS\Include-D__UVISION_VERSION="524" -DSTM32F10X_MD -DUSE_STDPERIPH_DRIVER-o .\objects\stm32f10x_it.o --omf_browse .\objects\stm32f10x_it.crf --depend .\objects\stm32f10x_it.d)
 I (User\stm32f10x_it.h)(0x690A0CE7)
