@@ -30,8 +30,6 @@
 ".\objects\oled.o"
 ".\objects\oled_data.o"
 ".\objects\key.o"
-".\objects\serial.o"
-".\objects\encoder.o"
 ".\objects\motor.o"
 ".\objects\pwm.o"
 ".\objects\ir.o"
