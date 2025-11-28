@@ -17,7 +17,7 @@ void PWM_Init(void)
 	TIM_TimeBaseInitStructure.TIM_ClockDivision = TIM_CKD_DIV1;
 	TIM_TimeBaseInitStructure.TIM_CounterMode = TIM_CounterMode_Up;
 	TIM_TimeBaseInitStructure.TIM_Period = 100 - 1;		//ARR
-	TIM_TimeBaseInitStructure.TIM_Prescaler = 720 - 1;		//PSC
+	TIM_TimeBaseInitStructure.TIM_Prescaler = 36 - 1;		//PSC
 	TIM_TimeBaseInitStructure.TIM_RepetitionCounter = 0;
 	TIM_TimeBaseInit(TIM2, &TIM_TimeBaseInitStructure);
 	
@@ -30,16 +30,15 @@ void PWM_Init(void)
 	TIM_OC3Init(TIM2, &TIM_OCInitStructure);
 	TIM_OC4Init(TIM2, &TIM_OCInitStructure);
 	
-	TIM_CtrlPWMOutputs(TIM2,ENABLE);//高级定时器tim2专属使能输出
 	TIM_Cmd(TIM2, ENABLE);
 }
 
 void PWM_SetCompare_Left(int16_t Compare)//1号电机pwm设置函数
 {
-	TIM_SetCompare1(TIM2, Compare);
+	TIM_SetCompare3(TIM2, Compare);
 }
 
 void PWM_SetCompare_Right(int16_t Compare)//2号电机pwm设置函数
 {
-	TIM_SetCompare2(TIM2, Compare);
+	TIM_SetCompare4(TIM2, Compare);
 }

@@ -14,6 +14,7 @@ typedef enum {
 
 // 全局变量
 SystemState g_SystemState = STATE_MENU;
+uint8_t g_FirstRun = 1;
 
 // 函数声明
 void DisplayMenu(void);
@@ -96,7 +97,7 @@ void KeyInput(void)
 {
     unsigned char keyValue = key_getnum();
     
-    if(keyValue == 1) // KEY1按下
+    if(keyValue == 1&& !g_FirstRun) // KEY1按下
     {
         Delay_ms(20); // 消抖
         
@@ -128,6 +129,10 @@ void KeyInput(void)
         while(key_getnum() == 1);
         Delay_ms(20);
     }
+	else if(keyValue == 0)
+    {
+        g_FirstRun = 0; // 第一次检测到按键释放后，启用按键功能
+    }
 }
 
 // 五路循迹控制算法
@@ -138,7 +143,6 @@ void CarControl(void)
     
     // 五路循迹逻辑
     // 传感器值：0=检测到黑线，1=检测到白线
-    
     // 情况1：中间传感器检测到黑线 - 直行
     if(sensor_values[IR_MIDDLE] == 0 && 
        sensor_values[IR_LEFT] == 1 && 

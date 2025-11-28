@@ -44,7 +44,8 @@ void Motor_RightSpeed(int16_t Speed)
 		GPIO_SetBits(GPIOB,GPIO_Pin_15);
 		PWM_SetCompare_Right(-Speed);
 	}
-	if(Speed>0)
+	else
+		
 	{
 		GPIO_SetBits(GPIOB,GPIO_Pin_14);
 		GPIO_ResetBits(GPIOB,GPIO_Pin_15);
