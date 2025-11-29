@@ -12,8 +12,8 @@ void Ir_init(void)
     GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
     GPIO_Init(GPIOA, &GPIO_InitStructure);
 
-    // 初始化GPIOB的B1和B3引脚
-    GPIO_InitStructure.GPIO_Pin = GPIO_Pin_1 | GPIO_Pin_3;
+    // 初始化GPIOB的B1和B4引脚
+    GPIO_InitStructure.GPIO_Pin = GPIO_Pin_1 | GPIO_Pin_4;
     GPIO_Init(GPIOB, &GPIO_InitStructure);
 	
 }
@@ -25,7 +25,7 @@ void IR_GetAllValues(unsigned char* sensor_values)
     sensor_values[1] = (GPIO_ReadInputDataBit(GPIOA, GPIO_Pin_5) == 0) ? 0 : 1;  // 左侧传感器
     sensor_values[2] = (GPIO_ReadInputDataBit(GPIOA, GPIO_Pin_8) == 0) ? 0 : 1;  // 中间传感器
     sensor_values[3] = (GPIO_ReadInputDataBit(GPIOB, GPIO_Pin_1) == 0) ? 0 : 1;  // 右侧传感器
-    sensor_values[4] = (GPIO_ReadInputDataBit(GPIOB, GPIO_Pin_3) == 0) ? 0 : 1;  // 最右侧传感器
+    sensor_values[4] = (GPIO_ReadInputDataBit(GPIOB, GPIO_Pin_4) == 0) ? 0 : 1;  // 最右侧传感器
 }
 
 // 获取单个传感器状态（可选，保持兼容性）
@@ -37,7 +37,7 @@ unsigned char IR_GetSensor(unsigned char sensor_num)
         case 1: return (GPIO_ReadInputDataBit(GPIOA, GPIO_Pin_5) == 0) ? 0 : 1;  // 左
         case 2: return (GPIO_ReadInputDataBit(GPIOA, GPIO_Pin_8) == 0) ? 0 : 1;  // 中
         case 3: return (GPIO_ReadInputDataBit(GPIOB, GPIO_Pin_1) == 0) ? 0 : 1;  // 右
-        case 4: return (GPIO_ReadInputDataBit(GPIOB, GPIO_Pin_3) == 0) ? 0 : 1;  // 最右
+        case 4: return (GPIO_ReadInputDataBit(GPIOB, GPIO_Pin_4) == 0) ? 0 : 1;  // 最右
         default: return 1;  // 默认返回1（白线）
     }
 }

@@ -24,39 +24,41 @@ void CarControl(void);
 // 显示菜单
 void DisplayMenu(void)
 {
+	OLED_Clear();  // 先清屏
     OLED_Printf(0, 0, OLED_8X16, "5-Way Line Tracking");
     
     if(g_SystemState == STATE_MENU)
     {
-        OLED_Printf(0, 16, OLED_8X16, "Press KEY to");
+        OLED_Printf(0, 16, OLED_8X16, "PressKEY to");
         OLED_Printf(0, 32, OLED_8X16, "Start Car");
     }
     else if(g_SystemState == STATE_RUNNING)
     {
         OLED_Printf(0, 16, OLED_8X16, "Running....");
-        OLED_Printf(0, 32, OLED_8X16, "Press KEY to stop");
+        OLED_Printf(0, 32, OLED_8X16, "PressKEY to stop");
         
         // 显示五路传感器状态
         unsigned char sensor_values[5];
         IR_GetAllValues(sensor_values);
-        OLED_Printf(0, 48, OLED_8X16, "%d%d%d%d%d", 
+        OLED_Printf(0, 48, OLED_8X16, "%d %d %d %d %d", 
                    sensor_values[0], sensor_values[1], sensor_values[2], 
                    sensor_values[3], sensor_values[4]);
     }
     else if(g_SystemState == STATE_STOP)
     {
         OLED_Printf(0, 16, OLED_8X16, "Stopped");
-        OLED_Printf(0, 32, OLED_8X16, "Press KEY to menu");
+        OLED_Printf(0, 32, OLED_8X16, "PressKEY to menu");
     }
+	OLED_Update();
 }
 
 int main(void)
 {   
     // 初始化模块
+	OLED_Init();
     Motor_Init();
     Ir_init();
     key_init();
-    OLED_Init();
     
     // 显示初始菜单
     OLED_Clear();
@@ -143,86 +145,82 @@ void CarControl(void)
     
     // 五路循迹逻辑
     // 传感器值：0=检测到黑线，1=检测到白线
-    // 情况1：中间传感器检测到黑线 - 直行
-    if(sensor_values[IR_MIDDLE] == 0 && 
-       sensor_values[IR_LEFT] == 1 && 
-       sensor_values[IR_RIGHT] == 1)
-    {
-        Motor_LeftSpeed(50);
-        Motor_RightSpeed(50);
-    }
-    // 情况2：左传感器检测到黑线 - 轻微左转
-    else if(sensor_values[IR_LEFT] == 0 && 
-            sensor_values[IR_MIDDLE] == 1 && 
-            sensor_values[IR_RIGHT] == 1)
-    {
-        Motor_LeftSpeed(30);
-        Motor_RightSpeed(60);
-    }
-    // 情况3：右传感器检测到黑线 - 轻微右转
-    else if(sensor_values[IR_RIGHT] == 0 && 
-            sensor_values[IR_MIDDLE] == 1 && 
-            sensor_values[IR_LEFT] == 1)
-    {
-        Motor_LeftSpeed(60);
-        Motor_RightSpeed(30);
-    }
-    // 情况4：最左传感器检测到黑线 - 大左转
-    else if(sensor_values[IR_LEFTMOST] == 0)
-    {
-        Motor_LeftSpeed(-40);
-        Motor_RightSpeed(70);
-    }
-    // 情况5：最右传感器检测到黑线 - 大右转
-    else if(sensor_values[IR_RIGHTMOST] == 0)
-    {
-        Motor_LeftSpeed(70);
-        Motor_RightSpeed(-40);
-    }
-    // 情况6：中间和左传感器检测到黑线 - 小左转
-    else if(sensor_values[IR_MIDDLE] == 0 && 
-            sensor_values[IR_LEFT] == 0)
-    {
-        Motor_LeftSpeed(40);
-        Motor_RightSpeed(55);
-    }
-    // 情况7：中间和右传感器检测到黑线 - 小右转
-    else if(sensor_values[IR_MIDDLE] == 0 && 
-            sensor_values[IR_RIGHT] == 0)
-    {
-        Motor_LeftSpeed(55);
-        Motor_RightSpeed(40);
-    }
-    // 情况8：所有传感器都检测到白线 - 可能脱线，根据上次状态处理或停止
-    else if(sensor_values[IR_LEFTMOST] == 1 && 
-            sensor_values[IR_LEFT] == 1 && 
-            sensor_values[IR_MIDDLE] == 1 && 
-            sensor_values[IR_RIGHT] == 1 && 
-            sensor_values[IR_RIGHTMOST] == 1)
-    {
-        // 这里可以添加脱线处理逻辑，比如保持上次转向或缓慢前进寻找黑线
-        Motor_LeftSpeed(20);
-        Motor_RightSpeed(20);
-    }
-    // 情况9：所有传感器都检测到黑线 - 十字路口或停车线
-    else if(sensor_values[IR_LEFTMOST] == 0 && 
-            sensor_values[IR_LEFT] == 0 && 
-            sensor_values[IR_MIDDLE] == 0 && 
-            sensor_values[IR_RIGHT] == 0 && 
-            sensor_values[IR_RIGHTMOST] == 0)
-    {
-        // 遇到十字路口，可以直行或停止
-        Motor_LeftSpeed(0);
-        Motor_RightSpeed(0);
-        Delay_s(2);
-        g_SystemState = STATE_STOP; // 自动切换到停止状态
-        OLED_Clear();
-        DisplayMenu();
-    }
-    // 默认情况：直行
-    else
-    {
-        Motor_LeftSpeed(50);
-        Motor_RightSpeed(50);
-    }
+	if( sensor_values[IR_LEFTMOST]==0 && sensor_values[IR_LEFT]==0 && sensor_values[IR_MIDDLE]==0 && sensor_values[IR_RIGHT]==1 && sensor_values[IR_RIGHTMOST]==1 )
+	{
+		Motor_LeftSpeed(-50);
+		Motor_RightSpeed(80);
+	}
+	else if( sensor_values[IR_LEFTMOST]==1 && sensor_values[IR_LEFT]==1 && sensor_values[IR_MIDDLE]==0 && sensor_values[IR_RIGHT]==0 && sensor_values[IR_RIGHTMOST]==0)
+	{
+		Motor_LeftSpeed(80);
+		Motor_RightSpeed(-50);
+	}
+	else if( sensor_values[IR_LEFTMOST]==1 && sensor_values[IR_LEFT]==1 && sensor_values[IR_MIDDLE]==1 && sensor_values[IR_RIGHT]==0 && sensor_values[IR_RIGHTMOST]==0)
+	{
+		Motor_LeftSpeed(90);
+		Motor_RightSpeed(-50);
+	}
+	else if( sensor_values[IR_LEFTMOST]==0 && sensor_values[IR_LEFT]==0 && sensor_values[IR_MIDDLE]==1 && sensor_values[IR_RIGHT]==1 && sensor_values[IR_RIGHTMOST]==1)
+	{
+		Motor_LeftSpeed(-50);
+		Motor_RightSpeed(90);
+	}	
+	else if( sensor_values[IR_LEFT]==1 && sensor_values[IR_MIDDLE]==0 && sensor_values[IR_RIGHT]==1 )
+	{
+		Motor_LeftSpeed(65);
+		Motor_RightSpeed(65);
+	}
+	// ========== 4. 只有1
+	else if(sensor_values[IR_LEFT]==0 && sensor_values[IR_MIDDLE]==1 && sensor_values[IR_RIGHT]==1 )
+	{
+		Motor_LeftSpeed(20);   // 左轮减速(小弯)
+		Motor_RightSpeed(80);   // 右轮加速
+	}
+	// ========== 6. 只有3
+	else if( sensor_values[IR_LEFT]==1 && sensor_values[IR_MIDDLE]==1 && sensor_values[IR_RIGHT]==0 )
+	{
+		Motor_LeftSpeed(80);   // 左轮加速(大弯)
+		Motor_RightSpeed(20);   // 右轮减速
+	}
+	// ========== 5. 只有0
+	else if(sensor_values[IR_LEFTMOST]==0 && sensor_values[IR_LEFT]==1 && sensor_values[IR_MIDDLE]==1 && sensor_values[IR_RIGHT]==1 && sensor_values[IR_RIGHTMOST]==1)
+	{
+		Motor_LeftSpeed(-70);   // 左轮反转(急弯)
+		Motor_RightSpeed(85);   // 右轮加速
+	}
+	// ========== 7. 只有5
+	else if(sensor_values[IR_LEFTMOST]==1 && sensor_values[IR_LEFT]==1 && sensor_values[IR_MIDDLE]==1 && sensor_values[IR_RIGHT]==1 && sensor_values[IR_RIGHTMOST]==0)
+	{
+		Motor_LeftSpeed(85);   // 左轮加速(急弯)
+		Motor_RightSpeed(-50);   // 右轮反转
+	}
+	// ========== 8. 有1，2
+	else if( sensor_values[IR_LEFTMOST]==1 && sensor_values[IR_LEFT]==0 && sensor_values[IR_MIDDLE]==0 && sensor_values[IR_RIGHT]==1 && sensor_values[IR_RIGHTMOST]==1 )
+	{
+		Motor_LeftSpeed(20);   // 左轮减速
+		Motor_RightSpeed(90);   // 右轮加速
+	}
+	// ========== 9. 2和3
+	else if(sensor_values[IR_LEFTMOST]==1 && sensor_values[IR_LEFT]==1 && sensor_values[IR_MIDDLE]==0 && sensor_values[IR_RIGHT]==0 && sensor_values[IR_RIGHTMOST]==1 )
+	{
+		Motor_LeftSpeed(80);   // 左轮加速
+		Motor_RightSpeed(20);   // 右轮减速
+	}
+	// ========== 10. 十字路口
+	else if(sensor_values[IR_LEFTMOST]==0 && sensor_values[IR_LEFT]==0 && sensor_values[IR_MIDDLE]==0 && sensor_values[IR_RIGHT]==0 && sensor_values[IR_RIGHTMOST]==0)
+	{
+		Motor_LeftSpeed(65);
+		Motor_RightSpeed(65);
+	}
+	else if( sensor_values[IR_LEFTMOST]==1 && sensor_values[IR_LEFT]==1 && sensor_values[IR_MIDDLE]==1 && sensor_values[IR_RIGHT]==1 && sensor_values[IR_RIGHTMOST]==1 )
+	{
+		Motor_LeftSpeed(45);   // 左轮减速
+		Motor_RightSpeed(45);   // 右轮减速
+	}
+	// ========== 12. 其他情况兜底
+	else
+	{
+		Motor_LeftSpeed(65);
+		Motor_RightSpeed(65);
+	}
 }
